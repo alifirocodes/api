@@ -17,6 +17,9 @@ from django.contrib.auth import authenticate # Verify password during login
 from django.contrib.auth.models import Group, User # Assign roles to user
 from rest_framework.permissions import IsAuthenticated # Restrict views to specific roles 
 from .permissions import IsPostAuthor # Restrict views to specific roles 
+from rest_framework.authentication import TokenAuthentication # Require authentication for all endpoints
+from rest_framework.permissions import IsAuthenticated # Require authentication for all endpoints
+
 
 # Create your views here.
 def get_users(request):
@@ -132,5 +135,12 @@ class PostDetailView(APIView):
         self.check_object_permissions(request, post)
         return Response({"content": post.content})
 
+# Require authentication for all endpoints
+class ProtectedView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
+
+    def get(self, request):
+        return Response({"message": "Authenticated!"})
 
