@@ -103,4 +103,3 @@ class CommentListCreate(APIView):
     
 user = User.objects.create_user(username="new_user", password="secure_pass123")
 print(user.password)  # Outputs a hashed password
-
