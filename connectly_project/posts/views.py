@@ -11,8 +11,10 @@ from rest_framework import status
 from .models import User, Post, Comment
 from .serializers import UserSerializer, PostSerializer, CommentSerializer
 
+# Week 4-5
 from django.contrib.auth.models import User # built-in password hashing
 from django.contrib.auth import authenticate # verify password during login
+from django.contrib.auth.models import Group, User # assign roles to user
 
 # Create your views here.
 def get_users(request):
@@ -101,15 +103,20 @@ class CommentListCreate(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+# Outputs a hashed password
 user = User.objects.create_user(username="new_user", password="secure_pass123")
-print(user.password)  # Outputs a hashed password
+print(user.password)  
 
-
-# Verify Passwords During Login
+# Verify passwords during login
 user = authenticate(username="new_user", password="secure_pass123")
 if user is not None:
     print("Authentication successful!")
 else:
     print("Invalid credentials.")
+
+# Assign roles to users
+admin_group = Group.objects.create(name="Admin")
+user = User.objects.get(username="admin_user")
+user.groups.add(admin_group)
 
