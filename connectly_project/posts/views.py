@@ -19,6 +19,7 @@ from rest_framework.permissions import IsAuthenticated # Restrict views to speci
 from .permissions import IsPostAuthor # Restrict views to specific roles 
 from rest_framework.authentication import TokenAuthentication # Require authentication for all endpoints
 from rest_framework.permissions import IsAuthenticated # Require authentication for all endpoints
+from rest_framework import serializers # Handle sensitive data safely
 
 
 # Create your views here.
@@ -143,4 +144,11 @@ class ProtectedView(APIView):
 
     def get(self, request):
         return Response({"message": "Authenticated!"})
+
+# Handle sensitive data safely
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email']  # Exclude sensitive fields like password
+
 
