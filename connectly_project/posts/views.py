@@ -12,6 +12,7 @@ from .models import User, Post, Comment
 from .serializers import UserSerializer, PostSerializer, CommentSerializer
 
 from django.contrib.auth.models import User # built-in password hashing
+from django.contrib.auth import authenticate # verify password during login
 
 # Create your views here.
 def get_users(request):
@@ -103,3 +104,12 @@ class CommentListCreate(APIView):
     
 user = User.objects.create_user(username="new_user", password="secure_pass123")
 print(user.password)  # Outputs a hashed password
+
+
+# Verify Passwords During Login
+user = authenticate(username="new_user", password="secure_pass123")
+if user is not None:
+    print("Authentication successful!")
+else:
+    print("Invalid credentials.")
+
