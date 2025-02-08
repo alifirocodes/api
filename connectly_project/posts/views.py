@@ -12,9 +12,11 @@ from .models import User, Post, Comment
 from .serializers import UserSerializer, PostSerializer, CommentSerializer
 
 # Week 4-5
-from django.contrib.auth.models import User # built-in password hashing
-from django.contrib.auth import authenticate # verify password during login
-from django.contrib.auth.models import Group, User # assign roles to user
+from django.contrib.auth.models import User # Built-in password hashing
+from django.contrib.auth import authenticate # Verify password during login
+from django.contrib.auth.models import Group, User # Assign roles to user
+from rest_framework.permissions import IsAuthenticated # Restrict views to specific roles 
+from .permissions import IsPostAuthor # Restrict views to specific roles 
 
 # Create your views here.
 def get_users(request):
@@ -119,4 +121,16 @@ else:
 admin_group = Group.objects.create(name="Admin")
 user = User.objects.get(username="admin_user")
 user.groups.add(admin_group)
+
+# Restrict views to specific roles 
+class PostDetailView(APIView):
+    permission_classes = [IsAuthenticated, IsPostAuthor]
+
+
+    def get(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        self.check_object_permissions(request, post)
+        return Response({"content": post.content})
+
+
 
