@@ -11,6 +11,7 @@ from rest_framework import status
 from .models import User, Post, Comment
 from .serializers import UserSerializer, PostSerializer, CommentSerializer
 
+from django.contrib.auth.models import User # built-in password hashing
 
 # Create your views here.
 def get_users(request):
@@ -99,3 +100,7 @@ class CommentListCreate(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+user = User.objects.create_user(username="new_user", password="secure_pass123")
+print(user.password)  # Outputs a hashed password
+
