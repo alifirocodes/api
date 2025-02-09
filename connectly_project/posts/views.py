@@ -15,8 +15,13 @@ from .serializers import UserSerializer, PostSerializer, CommentSerializer
 from django.contrib.auth.models import User # Built-in password hashing
 from django.contrib.auth import authenticate # Verify password during login
 from django.contrib.auth.models import Group, User # Assign roles to user
-from rest_framework.permissions import IsAuthenticated # Restrict views to specific roles 
-from .permissions import IsPostAuthor # Restrict views to specific roles 
+
+# Restrict views to specific roles
+from rest_framework.permissions import IsAuthenticated  
+from .permissions import IsPostAuthor 
+from rest_framework.response import Response
+from rest_framework.views import APIView 
+
 from rest_framework.authentication import TokenAuthentication # Require authentication for all endpoints
 from rest_framework.permissions import IsAuthenticated # Require authentication for all endpoints
 from rest_framework import serializers # Handle sensitive data safely
@@ -30,7 +35,7 @@ def get_users(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-'''@csrf_exempt
+@csrf_exempt
 def create_user(request):
     if request.method == 'POST':
         try:
@@ -39,8 +44,8 @@ def create_user(request):
             return JsonResponse({'id': user.id, 'message': 'User created successfully'}, status=201)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
-'''
 
+'''
 # Create a new user (POST)
 @csrf_exempt
 def create_user(request):
@@ -62,6 +67,7 @@ def create_user(request):
             return JsonResponse({"message": "User created successfully!", "user_id": user.id}, status=201)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
+'''
 
 @csrf_exempt
 def update_user(request, id):
@@ -133,10 +139,10 @@ class CommentListCreate(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Outputs a hashed password
-# user = User.objects.create_user(username="new_user", password="secure_pass123")
-user = User.objects.create_user()
-print(user.password)  
+# Leverage django's built-in password hashing:
+user = User.objects.create_user(username="new_user", password="secure_pass123")
+print(user.password)  # Outputs a hashed password
+
 
 # Verify passwords during login
 user = authenticate(username="new_user", password="secure_pass123")
