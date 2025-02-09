@@ -139,10 +139,16 @@ class CommentListCreate(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+<<<<<<< HEAD
 # Leverage django's built-in password hashing:
 user = User.objects.create_user(username="new_user", password="secure_pass123")
 print(user.password)  # Outputs a hashed password
 
+=======
+# Outputs a hashed password
+user = User.objects.create_user(username="new_user", password="secure_pass123")
+print(user.password)  
+>>>>>>> parent of d375e68 (Fix for unique constraint error)
 
 # Verify passwords during login
 user = authenticate(username="new_user", password="secure_pass123")
