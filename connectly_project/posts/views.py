@@ -111,7 +111,8 @@ class CommentListCreate(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Outputs a hashed password
-user = User.objects.create_user(username="new_user", password="secure_pass123")
+# user = User.objects.create_user(username="new_user", password="secure_pass123")
+user = User.objects.create_user()
 print(user.password)  
 
 # Verify passwords during login
